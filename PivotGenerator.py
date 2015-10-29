@@ -93,7 +93,7 @@ with session:
 	############# 
 	#init vars
 	#############	
-    rangeList = []
+	rangeList = []
 	rangeString = ''
 	
 	quoteString = ''
@@ -128,10 +128,10 @@ with session:
 	############# 
 	#get conf file parameter values
 	#############	
-    rangeVar 		= udaExec.config['rangeVar']
+	rangeVar 		= udaExec.config['rangeVar']
 	aggFunct 		= udaExec.config['denormAggFunction']
 	DB 				= udaExec.config['DB']
-	tableName 		= udaExec.config['tableName']
+	objectName 		= udaExec.config['objectName']
 	whereCondition  = udaExec.config['whereCondition']
 	
     ############# 
@@ -172,7 +172,7 @@ with session:
 	#concat final SQL 
 	#############	
 
-	pivotSql = 'select \n' + groupByString + aggString + 'FROM ' + DB + '.' + tableName + '\n' \
+	pivotSql = 'select \n' + groupByString + aggString + 'FROM ' + DB + '.' + objectName + '\n' \
 		  + whereCondition + 'Group By ' +  groupByString + '\n'
 
     ############# 
