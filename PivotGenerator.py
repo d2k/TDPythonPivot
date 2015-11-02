@@ -153,9 +153,9 @@ with session:
 			rowAgg = '	,' + aggFunct + '( case '\
 	                  + 'when '\
 			          + rangeVar + ' = ' + quoteString + str(rangeList[id2]) + quoteString  \
-			          + ' then ' + colNameIn + ' else null end) (title \'Column Info Source:' + colNameIn + ' - Row Condition : '\
-			          +  str(rangeList[id2]) +'\') as ' + colNameOut + '_' \
-			          + str(id2+1).zfill(3) + '\n'
+			          + ' then ' + colNameIn + ' else null end) (Title \'Column Info Source:' + colNameIn + ' - Row Condition : '\
+			          + str(rangeList[id2]) +'\') as ' + colNameOut + '_' \
+			          + str(id2+1).zfill(4) + '\n'
 			aggString = aggString + rowAgg
 
 	groupByList = udaExec.config['groupbyVarList'].split(',')
@@ -187,11 +187,22 @@ with session:
 		
 		sql = 'create table ${materializeDB}.${materializeTable} as (\n' + pivotSql + ') with data ${materializePI}; ' 
 		session.execute(sql)
-		udaExec.checkpoint("Table created")
-		
+		udaExec.checkpoint("Table created")			    
+		        
 		sql = 'comment table ${materializeDB}.${materializeTable} \'${materializeComment}\''
 		session.execute(sql)
 		udaExec.checkpoint("Table comment set")
+		
+		for id1 in range(len(denormColInList)):
+			colNameIn = denormColInList[id1]
+			colNameOut = denormColOutList[id1]
+			for id2 in range(len(idList)):
+				sql = 'COMMENT ON COLUMN ${materializeDB}.${materializeTable}.' + colNameOut + '_' \
+			          + str(id2+1).zfill(4) + ' AS  \'Column Info Source:' + aggFunct + '(' + colNameIn + ') - Row Condition : '\
+					  + str(rangeList[id2]) +'\';' + '\n'
+				session.execute(sql)
+		udaExec.checkpoint("Column comment set")
+
 	else:
 		print(pivotSql)
 
