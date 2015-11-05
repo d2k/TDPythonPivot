@@ -17,12 +17,12 @@ The main configuration is done via three ini files:
 ### database logon information - dwl/demo.dwl
 The database logoninformation requires the following parameter:
 
-- production=False
-- password=myPassword
-- user=myUser
-- system=mySystem
-- host=myRestServer
-- port=1080
+* production=True/False
+* password=myPassword
+* user=myUser
+* system=mySystem
+* host=myRestServer
+* port=myRestServerPort - Standard 1080
 
 ### pivot configuration parameter
 * DB 					= Databasename of the source table/view
@@ -50,3 +50,40 @@ The database logoninformation requires the following parameter:
 * materializeTable 			= table name for the materialized table
 * materializeComment 		= Comment String for the materialized table
 * materializePI 			= full primary index statement for the materialized table. Example: Primary Index (${groupbyVarList}) 
+
+### demo parameter settings
+The application comes with 3 demo parameter settings:
+
+* appini/demo1.ini 
+contains the parameter to denormalize the day_of_week, day_of_calendar  columns of the sys_calendar.calendar table for the last 12 full months. 
+The result is stored in a table.
+
+* appini/demo2.ini
+will denormalize the day_of_week column for the last 12 full months. The result columns will contain the number how often this weekday exists in the specific month. E.g. the demoralization contains an aggregation. 
+The result is again stored in a table.
+
+* appini/demo3.1.ini & appini/demo3.2.ini
+will denormalize the columntype of the dbc.columns table. Again the columns contain the column count per columntype value.
+demo3.1.ini will create a new table 
+demo3.2.ini will add new data to the existing table. 
+
+### program call 
+example programm calls
+
+python PivotGenerator.py -h 
+
+result: 
+
+usage: PivotGenerator.py [-h] [-l LOGONFILE] [-c CONFIGFILE]
+
+Teradata Pivot SQL generator
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -l LOGONFILE, --logonfile LOGONFILE
+                        logon file for the pivot operation
+  -c CONFIGFILE, --configfile CONFIGFILE
+                        config file for the pivot generation
+
+python PivotGenerator.py -l dwl/demo.dwl  -c appini/demo1.ini 
+
