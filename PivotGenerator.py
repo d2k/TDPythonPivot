@@ -148,11 +148,18 @@ with session:
 	#get conf file parameter values
 	#############	
 	rangeVar 		= udaExec.config['rangeVar']
-	aggFunct 		= udaExec.config['denormAggFunction']
 	DB 				= udaExec.config['DB']
 	objectName 		= udaExec.config['objectName']
 	whereCondition  = udaExec.config['whereCondition']
 	
+	denormAggFunctionList = udaExec.config['denormAggFunctionList'].split(',')
+	replaceNullValueList = udaExec.config['replaceNullValueList'].split(',')
+	
+	if (len(denormAggFunctionList) == 1):
+		denormAggFunctionList = [denormAggFunctionList[0]] * len(denormColInList)
+	if (len(replaceNullValueList) == 1):
+		replaceNullValueList = [replaceNullValueList[0]] * len(denormColInList)
+
     ############# 
 	#add range condition to where condition in case where condition is defined 
 	#############	
@@ -169,11 +176,10 @@ with session:
 		colNameIn = denormColInList[id1]
 		colNameOut = denormColOutList[id1]
 		for id2 in range(len(idList)):
-			nullValue = udaExec.config['replaceNullValue']
-			rowAgg = '	, coalesce(' + aggFunct + '( case '\
+			rowAgg = '	, coalesce(' + str(denormAggFunctionList[id1]) + '( case '\
 	           	      + 'when '\
 			       	  + rangeVar + ' = ' + quoteString + str(rangeList[id2]) + quoteString  \
-		        	  + ' then ' + colNameIn + ' else null end), ' + nullValue + ')' \
+		        	  + ' then ' + colNameIn + ' else null end), ' + str(replaceNullValueList[id1]) + ')' \
 		        	  + ' (Title \'Column Info Source:' + colNameIn + ' - Row Condition : '\
 		              + str(rangeList[id2]) +'\') as ' + colNameOut + '_' \
 		          	  + str(id2+1).zfill(4) + '\n'			
@@ -223,7 +229,7 @@ with session:
 				colNameOut = denormColOutList[id1]
 				for id2 in range(len(idList)):
 					sql = 'COMMENT ON COLUMN ${materializeDB}.${materializeTable}.' + colNameOut + '_' \
-						  + str(id2+1).zfill(4) + ' AS  \'Column Info Source:' + aggFunct + '(' + colNameIn + ') - Row Condition : '\
+						  + str(id2+1).zfill(4) + ' AS  \'Column Info Source:' + str(denormAggFunctionList[id1]) + '(' + colNameIn + ') - Row Condition : '\
 						  + str(rangeList[id2]) +'\';' + '\n'
 					session.execute(sql)
 			udaExec.checkpoint("Column comment set")

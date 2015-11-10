@@ -38,10 +38,10 @@ The database logoninformation requires the following parameter:
 * rangeType 			= type of the rangeQuery result (Numeric or Char)
 * rangeVar 				= varable which contains the range values
 
-* denormVarInList 		= ',' separated list which contains the column names which should be denormalized
-* denormVarOutList		= ',' separated list which contains the denormalized column names - the orig source column name is stored in the title info
-* denormAggFunction 	= aggregatation function used for the pivot transformation - most common are MAX, MIN, SUM, AVG. rangeType Char should use MAX or MIN
-* replaceNullValue		= Null replace value - Null is a valid value. Right now the solution can not handle different values in case denormVarInList contains a list of vars.
+* denormVarInList 			= ',' separated list which contains the column names which should be denormalized
+* denormVarOutList			= ',' separated list which contains the denormalized column names - the orig source column name is stored in the title info
+* denormAggFunctionList 	= ',' separated list which contains the aggregatation functions used for the pivot transformation - most common are MAX, MIN, SUM, AVG. rangeType Char should use MAX or MIN
+* replaceNullValueList		= ',' separated list which contains the Null replace values - Null is a valid value. Right now the solution can not handle different values in case denormVarInList contains a list of vars.
 
 * materializeFlag 			= True/False, indicates that the transformed data should be stored into a table. In case of False the generated SQL will just printed to STDOUT. The following parameter are only relevant in case this one is True
 * createTableFlag 			= True/False, indicates that a table should be created (True) or the target tables exists and the data is added to the table via Insert / Select (False)
@@ -54,7 +54,7 @@ The database logoninformation requires the following parameter:
 ### demo parameter settings
 The application comes with 3 demo parameter settings:
 
-* appini/demo1.ini 
+* appini/demo1.1.ini & appini/demo1.1.ini 
 contains the parameter to denormalize the day_of_week, day_of_calendar  columns of the sys_calendar.calendar table for the last 12 full months. 
 The result is stored in a table.
 
