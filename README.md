@@ -3,6 +3,8 @@ Demo of the Teradata Python module: a process which implements a pivot function 
 
 This version is supporting the RESTful API TD access. Using ODBC might require small changes.
 
+Feel free to donate bitcoin:12kgAUHFUqvG2sQgaRBXFhCwyf9HXdkGud?label=TeradataDev
+
 ## Install
 clone the repository or 
 download and unzip the zip file
